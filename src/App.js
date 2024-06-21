@@ -1,23 +1,15 @@
 import logo from './logo.svg';
-import './App.css';
+import { UserAuth } from "./context/AuthContext";
+import NonUserRoutes from "./routes/NonUserRoutes";
+import UserRoutes from "./routes/UserRoutes";
+import './index.css';
 
 function App() {
+  const { isLoggedOut } = UserAuth();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {isLoggedOut ? <NonUserRoutes /> : <UserRoutes /> }
     </div>
   );
 }
