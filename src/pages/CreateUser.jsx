@@ -11,8 +11,7 @@ export default function CreateUser () {
     const userData = {
         firstName,
         lastName,
-        email,
-        password
+        email
     }
 
     const handleCreateUser = () => {
@@ -39,11 +38,24 @@ export default function CreateUser () {
             onChange={(e) => {
                 setFirstName(e.target.value);
             }}/>
-            <input type="text" placeholder="Last Name" />
-            <input type="email" placeholder="Email" />
-            <input type="password" placeholder="Password" />
-            <input type="password" placeholder="Confirm Password" />
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" >Register</button>
+            <input type="text" placeholder="Last Name"
+            onChange={(e) => {
+                setLastName(e.target.value);
+            }}/>
+            <input type="email" placeholder="Email"
+            onChange={(e) => {
+                setEmail(e.target.value);
+            }}/>
+            <input type="password" placeholder="Password"
+            onChange={(e) => {
+                setPassword(e.target.value);
+            }}/>
+            <input type="password" placeholder="Confirm Password"
+            onChange={(e) => {
+                setConfirmPassword(e.target.value);
+            }}/>
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            onClick={handleCreateUser}>Register</button>
         </div>
         </>
     )

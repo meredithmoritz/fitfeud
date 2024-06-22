@@ -26,7 +26,7 @@ export const logOut = async () => {
 export const signUp = async (email, password, userData) => {
     try {
         const user = createUserWithEmailAndPassword(auth, email, password);
-        await setDoc(doc(db, "users", user.user.uid), {
+        await setDoc(doc(db, "Users", user.user.uid), {
             ...userData,
             uid: user.user.uid,
         });
