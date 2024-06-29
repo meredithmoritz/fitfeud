@@ -16,14 +16,19 @@ export default function AuthContextProvider({ children }) {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             if (currentUser) {
-                setIsLoggedOut(false);
-                onSnapshot(doc(db, "users", currentUser.uid), (doc) => {
-                    setUser(doc.data());
+                const unsubscribeDoc = onSnapshot(doc(db, "users", currentUser.uid), (doc) => {
+                    setUser({ uid: currentUser.uid, ...doc.data() });
+                }, (error) => {
+                    console.error("Error fetching user data:", error);
                 });
 
                 console.log("It ran again");
+
+                return () => {
+                    unsubscribeDoc();
+                }
             } else {
-                setIsLoggedOut(true);
+                setUser(null);
             }
         });
         return () => {
@@ -32,11 +37,7 @@ export default function AuthContextProvider({ children }) {
     }, []);
 
     return (
-        <UserContext.Provider
-            value={{
-                isLoggedOut,
-            }}
-        >
+        <UserContext.Provider value={{user}}>
             {children}
         </UserContext.Provider>
     );

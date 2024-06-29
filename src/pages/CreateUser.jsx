@@ -14,8 +14,8 @@ export default function CreateUser () {
         email
     }
 
-    const handleCreateUser = () => {
-        if(password !== confirmPassword) {
+    const handleCreateUser = async () => {
+        if (password !== confirmPassword) {
             alert("Passwords don't match")
         } else if (!email) {
             alert("Email is required")
@@ -25,7 +25,21 @@ export default function CreateUser () {
             alert("First name is required")
         } else if (!lastName) {
             alert("Last name is required")
-        } else signUp(email, password, userData);
+        } else {
+            try {
+                const userData = {
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    // Add any other user data you need here
+                };
+                const user = await signUp(email, password, userData);
+                alert("User created successfully");
+                // Perform any other actions after successful sign-up
+            } catch (error) {
+                alert("Error creating user: " + error.message);
+            }
+        }
     }
 
 
