@@ -3,14 +3,13 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { auth, db } from "../firebase/fire";
 
-const UserContext = createContext();
+const AuthContext = createContext();
 
 export const UserAuth = () => {
-    return useContext(UserContext)
+    return useContext(AuthContext)
 }
 
 export default function AuthContextProvider({ children }) {
-    const [isLoggedOut, setIsLoggedOut] = useState(true);
     const [user, setUser] = useState(null);
 
     useEffect(() => {
@@ -22,14 +21,14 @@ export default function AuthContextProvider({ children }) {
                     console.error("Error fetching user data:", error);
                 });
 
-                console.log("It ran again");
-
                 return () => {
                     unsubscribeDoc();
                 }
             } else {
                 setUser(null);
             }
+        }, (error) => {
+            console.error("Error with auth state change:", error);
         });
         return () => {
             unsubscribe();
@@ -37,8 +36,8 @@ export default function AuthContextProvider({ children }) {
     }, []);
 
     return (
-        <UserContext.Provider value={{user}}>
+        <AuthContext.Provider value={{user}}>
             {children}
-        </UserContext.Provider>
+        </AuthContext.Provider>
     );
 }

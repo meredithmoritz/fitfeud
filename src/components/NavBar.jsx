@@ -1,27 +1,32 @@
 import React from 'react';
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
-import { logOut } from '../functions/auth'
+import { logOut } from '../functions/auth.js'
 
 const NavBar = () => {
-    const { user, logout } = UserAuth();
+    const { user } = UserAuth();
 
     const navigate = useNavigate();
 
-    const handleSignIn = () => {
-        navigate('/create-account');
-    };
-
     const handleLogout = async () => {
         try {
+            console.log("Attempting to log out...");
             await logOut();
-            navigate('/login');
+            console.log("Logout successful, navigating to login page...");
+
+            // Ensure user state is updated before navigating
+            if (!user) {
+                navigate('/login');
+            } else {
+                console.error("User state not updated correctly.");
+            }
         } catch (error) {
             console.error("Error logging out: ", error);
         }
     };
 
     return (
+        <>
         <nav className="bg-white border-b border-gray-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
@@ -34,10 +39,10 @@ const NavBar = () => {
                                className="text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium">
                                 Home
                             </a>
-                            <a href="/create-user"
+                            <Link to="/logs"
                                className="text-gray-500 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">
-                                Create User
-                            </a>
+                                Workout Log
+                            </Link>
                         </div>
                     </div>
                     <div className="hidden sm:ml-6 sm:flex sm:items-center">
@@ -56,13 +61,20 @@ const NavBar = () => {
                                 >
                                     Sign In
                                 </button>
+                                <button
+                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-1"
+                                    onClick={() => navigate('/create-user')}
+                                >
+                                    Register
+                                </button>
                             </>
                         )}
                     </div>
                 </div>
             </div>
         </nav>
+        </>
     );
-};
+}
 
 export default NavBar;

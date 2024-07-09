@@ -3,7 +3,6 @@ import { Route, Routes } from "react-router-dom"
 import UserDashboard from "../pages/UserDashboard";
 import NavBar from "../components/NavBar";
 import Home from "../pages/Home";
-import CreateUser from "../pages/CreateUser";
 import Login from "../pages/Login";
 
 export default function UserRoutes() {
