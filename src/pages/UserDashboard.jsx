@@ -5,7 +5,7 @@ export default function UserDashboard() {
     const { user } = UserAuth();
 
     return (
-        <div>
+        <div className="m-5">
             {user ? (
                 <div>Welcome {user?.firstName}!</div>
             ) : (
