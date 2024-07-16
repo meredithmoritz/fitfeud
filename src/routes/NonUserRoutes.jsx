@@ -8,10 +8,11 @@ export default function NonUserRoutes() {
     return (
         <div>
             <Routes>
-                <Route path="/" element={<Home/>} />
-                <Route path="/create-user" element={<CreateUser/>} />
-                <Route path="/login" element={<Login/>} />
-                <Route path="/*" element={<Home/>} />
+                {/* Routes for users who are not logged in: */}
+                <Route path="/" element={<Home />} />
+                <Route path="/create-user" element={<CreateUser />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/*" element={<Home />} /> {/* Fallback to Home */}
             </Routes>
         </div>
     )

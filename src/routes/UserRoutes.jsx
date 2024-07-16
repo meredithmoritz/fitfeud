@@ -1,21 +1,18 @@
 import React from 'react'
 import { Route, Routes } from "react-router-dom"
 import UserDashboard from "../pages/UserDashboard";
-import NavBar from "../components/NavBar";
 import Home from "../pages/Home";
-import Login from "../pages/Login";
+import Profile from "../pages/Profile";
 
 export default function UserRoutes() {
     return (
         <div>
-            <NavBar>
                 <Routes>
-                    <Route path="/" element={<Home/>} />
-                    <Route path="/login" element={<Login/>} />
-                    <Route path="/*" element={<Home/>} />
+                    {/* Routes for logged-in users: */}
+                    <Route path="/" element={<UserDashboard />} />
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/*" element={<UserDashboard />} /> {/* Fallback to UserDashboard */}
                 </Routes>
-            </NavBar>
-            <UserDashboard />
         </div>
     )
 }
