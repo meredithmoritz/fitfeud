@@ -32,7 +32,6 @@ export default function CreateUser () {
 
     return (
         <>
-            <NavBar />
             <h1 className="text-3xl font-bold text-center mb-12">Register</h1>
 
             <form onSubmit={handleSubmit(onSubmit)} id="registrationForm" className="max-w-sm mx-auto">

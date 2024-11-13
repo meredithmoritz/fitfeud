@@ -13,6 +13,10 @@ module.exports = {
     require("@tailwindcss/forms"),
     require("@tailwindcss/aspect-ratio"),
     require("flowbite/plugin"),
+    require("daisyui"),
   ],
+  daisyui: {
+    themes: ["light"],
+  },
 }
 

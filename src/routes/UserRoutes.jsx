@@ -1,8 +1,9 @@
 import React from 'react'
 import { Route, Routes } from "react-router-dom"
 import UserDashboard from "../pages/UserDashboard";
-import Home from "../pages/Home";
 import Profile from "../pages/Profile";
+import WorkoutLog from "../pages/WorkoutLog";
+import AddWorkout from "../pages/AddWorkout";
 
 export default function UserRoutes() {
     return (
@@ -11,6 +12,8 @@ export default function UserRoutes() {
                     {/* Routes for logged-in users: */}
                     <Route path="/" element={<UserDashboard />} />
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/workouts" element={<WorkoutLog />} />
+                    <Route path="/workouts/add" element={<AddWorkout />} />
                     <Route path="/*" element={<UserDashboard />} /> {/* Fallback to UserDashboard */}
                 </Routes>
         </div>

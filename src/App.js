@@ -6,7 +6,11 @@ import NavBar from "./components/NavBar";
 
 function App() {
   // Retrieves the current user's authentication status:
-  const { user } = UserAuth();
+  const { user, loading } = UserAuth();
+
+  if (loading) {
+      return null; // Do not render anything while loading page
+  }
 
   return (
     <div>

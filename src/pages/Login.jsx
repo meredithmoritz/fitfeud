@@ -31,7 +31,6 @@ export default function Login() {
     }
     return (
         <div>
-            <NavBar/>
             <form id="loginForm" className="max-w-sm mx-auto">
                 <div className="mb-5">
                     <label htmlFor="loginEmail"
