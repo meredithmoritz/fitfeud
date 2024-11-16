@@ -5,10 +5,8 @@ import './index.css';
 import NavBar from "./components/NavBar";
 
 function App() {
-    // Retrieves the current user's authentication status:
-    const context = UserAuth();
-
-    const { user, loading } = context;
+  // Retrieves the current user's authentication status:
+  const { user, loading } = UserAuth();
 
   if (loading) {
       return null; // Do not render anything while loading page

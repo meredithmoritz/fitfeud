@@ -2,12 +2,7 @@ import React from 'react'
 import { UserAuth } from "../context/AuthContext";
 
 export default function UserDashboard() {
-    const context = UserAuth();
-    if (!context) {
-        return null; // or a loading spinner
-    }
-
-    const { user } = context;
+    const { user } = UserAuth();
 
     return (
         <div className="m-5">
