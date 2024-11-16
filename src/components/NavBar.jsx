@@ -2,12 +2,17 @@ import React from 'react';
 import { Link, useNavigate} from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
 import { logOut } from '../functions/auth.js';
-import { LuUserCircle2 } from "react-icons/lu";
 
 const NavBar = () => {
-    const { user } = UserAuth();
+    const navigate = useNavigate(); // Always call useNavigate unconditionally
+    const context = UserAuth();
 
-    const navigate = useNavigate();
+    // If the context is not available yet, render nothing or a loading state
+    if (!context) {
+        return null; // Or a loading spinner or message
+    }
+
+    const { user, setUser } = context;
 
     const handleLogout = async () => {
         try {
@@ -16,11 +21,8 @@ const NavBar = () => {
             console.log("Logout successful, navigating to login page...");
 
             // Ensure user state is updated before navigating
-            if (!user) {
-                navigate('/');
-            } else {
-                console.error("User state not updated correctly.");
-            }
+            setUser(null);  // Manually set user to null
+            navigate('/');  // Navigate to the login page
         } catch (error) {
             console.error("Error logging out: ", error);
         }

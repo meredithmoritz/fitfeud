@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { signUp } from "../functions/auth.js";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -12,7 +11,7 @@ export default function CreateUser () {
     const password = watch("password");
 
     const onSubmit = async (data) => {
-        const { email, username, firstName, lastName, password, confirmPassword } = data;
+        const { email, username, firstName, lastName, password } = data;
 
         try {
             const userData = {

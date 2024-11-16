@@ -1,16 +1,16 @@
 import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword
 } from 'firebase/auth';
-import { auth, db } from "../firebase/fire";
-import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
+import { auth } from "../firebase/fire";
 
 export const signIn = async (email, password) => {
     try {
         const res = await signInWithEmailAndPassword(auth, email, password);
-        console.log(res, res);
+        console.log('Logged in successfully', res);
         return res.user;
     } catch (error) {
+        console.error('Error logging in:', error);
         return error;
     }
 }
@@ -26,42 +26,32 @@ export const logOut = async () => {
 
 export const signUp = async (email, password, userData) => {
     try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const user = userCredential.user;
+        // Create user in Firebase Authentication first
+        const res = await createUserWithEmailAndPassword(auth, email, password);
+        const { uid } = res.user;
 
-        // Get the latest user ID
-        const counterRef = doc(db, "counters", "users");
-        const counterSnap = await getDoc(counterRef);
-        let newUserId = 1;
+        console.log('User created in Firebase Authentication:', res);
 
-        if (counterSnap.exists()) {
-            const data = counterSnap.data();
-            newUserId = data.latestUserId + 1;
-        } else {
-            // If the document doesn't exist, initialize it with the first user ID
-            await setDoc(counterRef, { latestUserId: 1 });
+        // Call the backend to create the user document in Firestore
+        const userDocResponse = await fetch('http://localhost:5000/api/createUserDocument', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password, userData, uid }),
+        });
+
+        if (!userDocResponse.ok) {
+            throw new Error('Failed to create user document');
         }
 
-        // Set the default role to 'user' upon registering
-        const role = userData.role || "user";
-
-        // Set user data in Firestore
-        await setDoc(doc(db, "users", user.uid), {
-            ...userData,
-            role,
-            uid: user.uid,
-            createdAt: new Date(),
-            userId: newUserId
-        });
-
-        // Update the latest user ID in the counter document
-        await updateDoc(counterRef, {
-            latestUserId: newUserId
-        });
-
-        return user;
+        const data = await userDocResponse.json();
+        if (userDocResponse.status === 201) {
+            console.log('User registered successfully:', data);
+            return data;
+        } else {
+            throw new Error(data.message || 'Registration failed');
+        }
     } catch (error) {
-        console.error("Error signing up: ", error);
-        return error;
+        console.error('Error registering user:', error);
+        throw error;
     }
-}
+};
