@@ -37,11 +37,18 @@ export const signUp = async (email, password, userData) => {
         if (counterSnap.exists()) {
             const data = counterSnap.data();
             newUserId = data.latestUserId + 1;
+        } else {
+            // If the document doesn't exist, initialize it with the first user ID
+            await setDoc(counterRef, { latestUserId: 1 });
         }
+
+        // Set the default role to 'user' upon registering
+        const role = userData.role || "user";
 
         // Set user data in Firestore
         await setDoc(doc(db, "users", user.uid), {
             ...userData,
+            role,
             uid: user.uid,
             createdAt: new Date(),
             userId: newUserId

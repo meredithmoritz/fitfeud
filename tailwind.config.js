@@ -16,7 +16,22 @@ module.exports = {
     require("daisyui"),
   ],
   daisyui: {
-    themes: ["light"],
-  },
+    themes: [
+        "light",
+        {
+          fitfeud: {
+            "primary": "#A288A6",
+            "secondary": "#6F9283",
+            "accent": "#232F29",
+            "neutral": "#FFFFFF",
+            "base-100": "#ffffff",
+            "info": "#4091d7",
+            "success": "#4F9D69",
+            "warning": "#F99C39",
+            "error": "#D84654",
+          },
+        }
+    ]
+  }
 }
 
