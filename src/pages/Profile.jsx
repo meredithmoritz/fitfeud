@@ -1,6 +1,16 @@
 import React from 'react'
 import {UserAuth} from "../context/AuthContext";
 
+function formatDate(dateString) {
+    if (!dateString) return 'N/A';
+
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-US', {
+        dateStyle: 'medium',
+        timeStyle: 'short'
+    }).format(date);
+}
+
 export default function Profile () {
     const { user, loading } = UserAuth();
 
@@ -49,7 +59,7 @@ export default function Profile () {
                     </div>
                     <div className="mb-4">
                         <p className="text-lg font-semibold">Account Created:</p>
-                        <p>{user?.createdAt?.toDate().toLocaleString()}</p>
+                        <p>{formatDate(user?.createdAt)}</p>
                     </div>
                 </div>
             </div>
