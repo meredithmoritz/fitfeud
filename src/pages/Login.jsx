@@ -1,72 +1,121 @@
 import React, { useState } from 'react'
 import { signIn } from '../functions/auth';
-import NavBar from "../components/NavBar";
+import { useForm } from 'react-hook-form';
 
 export default function Login() {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [emailError, setEmailError] = useState(false)
-    const [passwordError, setPasswordError] = useState(false)
-    const [loginError, setLoginError] = useState('')
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const [isLoading, setIsLoading] = useState(false);
+    const [authError, setAuthError] = useState('');
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        setEmailError(false);
-        setPasswordError(false);
-        setLoginError('');
+    const onSubmit = async (data) => {
+        setAuthError('');
+        setIsLoading(true);
 
-        if (!email) {
-            setEmailError(true);
-        }
-        if (!password) {
-            setPasswordError(true);
-        }
-        if (email && password) {
-            try {
-                await signIn(email, password);
-            } catch (error) {
-                console.error("Error signing in: ", error);
+        try {
+            const result = await signIn(data.email, data.password);
+            if (result instanceof Error) {
+                // Handle specific Firebase auth errors
+                switch (result.code) {
+                    case 'auth/user-not-found':
+                        setAuthError('No account exists with this email.');
+                        break;
+                    case 'auth/wrong-password':
+                        setAuthError('Incorrect password.');
+                        break;
+                    case 'auth/invalid-credential':
+                        setAuthError('Invalid email or password.');
+                        break;
+                    case 'auth/too-many-requests':
+                        setAuthError('Too many failed attempts. Please try again later.');
+                        break;
+                    default:
+                        setAuthError('An error occurred during login.');
+                }
             }
+        } catch (error) {
+            console.error("Error signing in: ", error);
+            setAuthError('An unexpected error occurred. Please try again.');
+        } finally {
+            setIsLoading(false);
         }
     }
+
     return (
         <div>
-            <form id="loginForm" className="max-w-sm mx-auto">
-                <div className="mb-5">
-                    <label htmlFor="loginEmail"
-                           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                    <input type="email"
-                           id="loginEmail"
-                           placeholder="Email"
-                           className={`bg-gray-50 border ${emailError ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
-                           onChange={(e) => {
-                               setEmail(e.target.value);
-                               if (emailError) {
-                                   setEmailError(false);
-                               }
-                           }
-                           }/>
-                    {!emailError ? <p className="hidden"></p> : <p className="mt-2 text-sm text-red-600 dark:text-red-500">Email is required!</p> }
-                </div>
-                <div className="mb-5">
-                <label htmlFor="loginPassword"
-                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                    <input type="password"
-                           id="loginPassword"
-                           placeholder="Password"
-                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                           onChange={(e) => {
-                               setPassword(e.target.value);
-                           }}/>
-                </div>
-                <div className="flex items-start mb-5">
+            <form id="loginForm" className="max-w-sm mx-auto" onSubmit={handleSubmit(onSubmit)}>
+                <h1 className="text-3xl font-bold mb-10">Log in</h1>
+
+                {authError && (
+                    <div role="alert" className="alert alert-error text-xs p-2 mb-4">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 shrink-0 stroke-current"
+                            fill="none"
+                            viewBox="0 0 24 24">
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>{authError}</span>
+                    </div>
+                )}
+
+                <label id="loginEmailLabel"
+                       htmlFor="loginEmail"
+                       className="form-control mb-1 text-sm font-medium dark:text-white">
+                    Email
+                </label>
+                <input
+                    id="loginEmailInput"
+                    className={`input input-sm block p-2.5 w-full max-w-sm ${errors.email ? 'input-error focus:input-error' : 'input-bordered focus:input-primary'}`}
+                    placeholder="Email"
+                    {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                            message: "Please enter a valid email"
+                        }
+                    })}
+                    onChange={() => setAuthError('')}
+                />
+                {errors.email && <p className="mt-1 text-xs text-error">{errors.email.message}</p>}
+
+                <label id="loginPasswordLabel"
+                       htmlFor="loginPassword"
+                       className="block mb-2 text-sm font-medium text-gray-900 mt-3 dark:text-white">
+                    Password
+                </label>
+                <input
+                    id="loginPasswordInput"
+                    type="password"
+                    placeholder="Password"
+                    className={`input input-sm block p-2.5 w-full max-w-sm ${errors.password ? 'input-error focus:input-error' : 'input-bordered focus:input-primary'}`}
+                    {...register("password", {
+                        required: "Please enter a password"
+                    })}
+                    onChange={() => setAuthError('')}
+                />
+                {errors.password && <p className="mt-1 text-xs text-error">{errors.password.message}</p>}
+
+                <div className="text-center">
                     <button
+                        type="submit"
                         id="loginButton"
-                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                        onClick={handleLogin}>Login
+                        disabled={isLoading}
+                        className={`btn btn-primary w-full mt-6 center lg:btn-wide ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}>
+                        {isLoading ? (
+                            <>
+                                <span className="loading loading-spinner"></span>
+                                Logging in...
+                            </>
+                        ) : (
+                            'Log in'
+                        )}
                     </button>
                 </div>
             </form>
         </div>
-)
+    )
 }

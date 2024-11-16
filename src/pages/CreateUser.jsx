@@ -1,37 +1,76 @@
-import React, { useState } from 'react';
 import { signUp } from "../functions/auth.js";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import React, { useState } from "react";
 
 export default function CreateUser () {
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+    const [serverError, setServerError] = useState(null);
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const { register, handleSubmit, watch, formState: { errors }, setError } = useForm();
 
-    // Watch the password field
     const password = watch("password");
 
     const onSubmit = async (data) => {
-        const { email, username, firstName, lastName, password, confirmPassword } = data;
+        setIsLoading(true);
+        setServerError(null);
+
+        const { email, username, firstName, lastName, password } = data;
 
         try {
             const userData = {
-                email: email,
-                username: username,
-                firstName: firstName,
-                lastName: lastName,
+                email,
+                username,
+                firstName,
+                lastName,
             };
+
             await signUp(email, password, userData);
             navigate('/');
         } catch (error) {
-            alert("Error creating user: " + error.message);
+            console.error("Registration error:", error);
+
+            // Handle specific Firebase errors
+            if (error.code === 'auth/email-already-in-use') {
+                setError('email', {
+                    type: 'manual',
+                    message: 'This email is already registered'
+                });
+            } else if (error.message.includes('username')) { // If you add username uniqueness check
+                setError('username', {
+                    type: 'manual',
+                    message: 'This username is already taken'
+                });
+            } else {
+                setServerError(error.message || "An error occurred during registration");
+            }
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)} id="registrationForm" className="max-w-sm mx-auto">
-                <h1 className="text-3xl font-bold mb-12">Register</h1>
+                <h1 className="text-3xl font-bold mb-10">Register</h1>
+
+                {serverError && (
+                    <div role="alert" className="alert alert-error text-xs p-2 mb-4">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 shrink-0 stroke-current"
+                            fill="none"
+                            viewBox="0 0 24 24">
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>{serverError}</span>
+                    </div>
+                )}
 
                 {/* Email: Required */}
                 <label id="regEmaiLabel" className="form-control mb-1 text-sm font-medium dark:text-white">Email</label>
@@ -64,8 +103,28 @@ export default function CreateUser () {
                             value: /^[a-zA-Z0-9-]+$/,
                             message: "Username can only contain letters, numbers, and hyphens",
                         },
-                        minLength: {value: 4, message: "Usernames must be between 6-30 characters"},
-                        maxLength: {value: 30, message: "Usernames must be between 6-30 characters"}
+                        validate: {
+                            minMaxLength: value =>
+                                (value.length >= 6 && value.length <= 30) ||
+                                "Username must be between 6-30 characters",
+                            noSpaces: value =>
+                                !value.includes(" ") ||
+                                "Username cannot contain spaces",
+                            validStart: value =>
+                                /^[a-zA-Z]/.test(value) ||
+                                "Username must start with a letter",
+                            noConsecutiveHyphens: value =>
+                                !/--/.test(value) ||
+                                "Username cannot contain consecutive hyphens"
+                        },
+                        minLength: {
+                            value: 6,
+                            message: "Username must be at least 6 characters"
+                        },
+                        maxLength: {
+                            value: 30,
+                            message: "Username cannot exceed 30 characters"
+                        }
                     })}
                 />
                 {errors.username && <p className="mt-1 text-xs text-error">{errors.username.message}</p>}
@@ -125,12 +184,21 @@ export default function CreateUser () {
                 {errors.confirmPassword &&
                     <p className="mt-1 text-xs text-error dark:text-error">{errors.confirmPassword.message}</p>}
 
-                <div className="registerButton text-center">
+                <div className="text-center">
                 <button
+                    id="registerButton"
                     className="btn btn-primary w-full mt-6 center lg:btn-wide"
                     type="submit"
+                    disabled={isLoading}
                 >
-                    Register
+                    {isLoading ? (
+                        <>
+                            <span className="loading loading-spinner"></span>
+                            Registering...
+                        </>
+                    ) : (
+                        "Register"
+                    )}
                 </button>
                 </div>
             </form>

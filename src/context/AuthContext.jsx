@@ -14,20 +14,35 @@ export default function AuthContextProvider({ children }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            if (currentUser) {
-                const unsubscribeDoc = onSnapshot(doc(db, "users", currentUser.uid), (doc) => {
-                    setUser({ uid: currentUser.uid, ...doc.data() });
-                    setLoading(false);
-                }, (error) => {
-                    console.error("Error fetching user data:", error);
-                    setLoading(false);
-                });
+        let unsubscribeDoc = null;
+        const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
+            // Clean up existing document listener if it exists
+            if (unsubscribeDoc) {
+                unsubscribeDoc();
+                unsubscribeDoc = null;
+            }
 
-                return () => {
-                    unsubscribeDoc();
-                }
+            if (currentUser) {
+                // Set up new document listener only if user is authenticated
+                unsubscribeDoc = onSnapshot(
+                    doc(db, "users", currentUser.uid),
+                    (doc) => {
+                        if (doc.exists()) {
+                            setUser({ uid: currentUser.uid, ...doc.data() });
+                        } else {
+                            console.warn("User document does not exist");
+                            setUser(currentUser); // Fallback to basic auth user
+                        }
+                        setLoading(false);
+                    },
+                    (error) => {
+                        console.error("Error fetching user data:", error);
+                        setUser(currentUser); // Fallback to basic auth user
+                        setLoading(false);
+                    }
+                );
             } else {
+                // User is logged out
                 setUser(null);
                 setLoading(false);
             }
@@ -35,8 +50,14 @@ export default function AuthContextProvider({ children }) {
             console.error("Error with auth state change:", error);
             setLoading(false);
         });
-        // Cleanup auth listener on component unmount
-        return () => unsubscribe();
+
+        // Cleanup function
+        return () => {
+            if (unsubscribeDoc) {
+                unsubscribeDoc();
+            }
+            unsubscribeAuth();
+        };
     }, []);
 
     return (

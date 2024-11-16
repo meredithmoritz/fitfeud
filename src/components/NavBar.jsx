@@ -2,25 +2,17 @@ import React from 'react';
 import { Link, useNavigate} from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
 import { logOut } from '../functions/auth.js';
-import { LuUserCircle2 } from "react-icons/lu";
 
 const NavBar = () => {
     const { user } = UserAuth();
-
     const navigate = useNavigate();
 
     const handleLogout = async () => {
         try {
             console.log("Attempting to log out...");
             await logOut();
-            console.log("Logout successful, navigating to login page...");
-
-            // Ensure user state is updated before navigating
-            if (!user) {
-                navigate('/');
-            } else {
-                console.error("User state not updated correctly.");
-            }
+            console.log("Logout successful, navigating home...");
+            navigate('/');
         } catch (error) {
             console.error("Error logging out: ", error);
         }
@@ -68,7 +60,7 @@ const NavBar = () => {
                             Log in
                         </button>
                         <button
-                            className="btn btn-secondary ml-2"
+                            className="btn btn-secondary"
                             onClick={() => navigate('/create-user')}
                         >
                             Register
