@@ -13,7 +13,7 @@ export default function UserRoutes() {
                     <Route path="/" element={<UserDashboard />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/workouts" element={<WorkoutLog />} />
-                    <Route path="/workouts/add" element={<CreateWorkout />} />
+                    <Route path="/workouts/create" element={<CreateWorkout />} />
                     <Route path="/*" element={<UserDashboard />} /> {/* Fallback to UserDashboard */}
                 </Routes>
         </div>
