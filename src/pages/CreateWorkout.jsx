@@ -4,7 +4,7 @@ import { UserAuth } from "../context/AuthContext";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom'; // Update this line to use useNavigate
 
-const AddWorkoutForm = () => {
+const CreateWorkoutForm = () => {
     const { user } = UserAuth();
     const [exerciseName, setExerciseName] = useState("Squat");
     const [weight, setWeight] = useState("");
@@ -85,4 +85,4 @@ const AddWorkoutForm = () => {
     );
 };
 
-export default AddWorkoutForm;
+export default CreateWorkoutForm;

@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom"
 import UserDashboard from "../pages/UserDashboard";
 import Profile from "../pages/Profile";
 import WorkoutLog from "../pages/WorkoutLog";
-import AddWorkout from "../pages/AddWorkout";
+import CreateWorkout from "../pages/CreateWorkout";
 
 export default function UserRoutes() {
     return (
@@ -13,7 +13,7 @@ export default function UserRoutes() {
                     <Route path="/" element={<UserDashboard />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/workouts" element={<WorkoutLog />} />
-                    <Route path="/workouts/add" element={<AddWorkout />} />
+                    <Route path="/workouts/add" element={<CreateWorkout />} />
                     <Route path="/*" element={<UserDashboard />} /> {/* Fallback to UserDashboard */}
                 </Routes>
         </div>
