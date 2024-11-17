@@ -71,15 +71,18 @@ export const signUp = async (email, password, userData) => {
         console.error("Error signing up: ", error);
 
         // Return structured errors for all cases
-        if (error.code === "auth/username-already-in-use") {
-            throw error; // Already structured correctly
+        if (error.message === "username-already-exists") {
+            throw new Error(JSON.stringify({
+                code: "auth/username-already-in-use",
+                message: "This username is already taken"
+            }));
         } else if (error.code?.startsWith("auth/")) {
-            throw error; // Firebase auth errors are already structured
+            throw error; // Firebase auth errors are already proper Error objects
         } else {
-            throw {
+            throw new Error(JSON.stringify({
                 code: "registration/unknown-error",
                 message: "An unexpected error occurred during registration"
-            };
+            }));
         }
     }
 }
