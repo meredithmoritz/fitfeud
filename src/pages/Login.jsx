@@ -64,7 +64,7 @@ export default function Login() {
 
                 <label id="loginEmailLabel"
                        htmlFor="loginEmail"
-                       className="form-control mb-1 text-sm font-medium dark:text-white">
+                       className="form-control mb-1 text-sm font-medium">
                     Email
                 </label>
                 <input
@@ -84,7 +84,7 @@ export default function Login() {
 
                 <label id="loginPasswordLabel"
                        htmlFor="loginPassword"
-                       className="block mb-2 text-sm font-medium text-gray-900 mt-3 dark:text-white">
+                       className="block mb-2 text-sm font-medium text-gray-900 mt-3">
                     Password
                 </label>
                 <input

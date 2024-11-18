@@ -73,7 +73,7 @@ export default function CreateUser () {
                 )}
 
                 {/* Email: Required */}
-                <label id="regEmaiLabel" className="form-control mb-1 text-sm font-medium dark:text-white">Email</label>
+                <label id="regEmaiLabel" className="form-control mb-1 text-sm font-medium">Email</label>
                 <input
                     id="regEmailInput"
                     className={`input input-sm block p-2.5 w-full max-w-sm ${errors.email ? 'input-error focus:input-error' : 'input-bordered focus:input-primary'}`}
@@ -91,7 +91,7 @@ export default function CreateUser () {
 
                 {/* Username: Required */}
                 <label id="regUsernameLabel"
-                       className="form-control mb-1 text-sm font-medium dark:text-white mt-3">Username</label>
+                       className="form-control mb-1 text-sm font-medium mt-3">Username</label>
                 <input
                     id="regUsernameInput"
                     className={`input input-sm block p-2.5 w-full max-w-sm ${errors.username ? 'input-error focus:input-error' : 'input-bordered focus:input-primary'}`}
@@ -130,7 +130,7 @@ export default function CreateUser () {
                 {errors.username && <p className="mt-1 text-xs text-error">{errors.username.message}</p>}
 
                 {/* First Name: Required */}
-                <label className="form-control mb-1 text-sm font-medium dark:text-white mt-3">First Name</label>
+                <label className="form-control mb-1 text-sm font-medium mt-3">First Name</label>
                 <input
                     className={`input input-sm block p-2.5 w-full max-w-sm ${errors.firstName ? 'input-error focus:input-error' : 'input-bordered focus:input-primary'} `}
                     type="text"
@@ -143,7 +143,7 @@ export default function CreateUser () {
                 {errors.firstName && <p className="mt-1 text-xs text-error">{errors.firstName.message}</p>}
 
                 {/* Last Name: Optional */}
-                <label className="form-control mb-1 text-sm font-medium dark:text-white mt-3">Last Name
+                <label className="form-control mb-1 text-sm font-medium mt-3">Last Name
                     (Optional)</label>
                 <input
                     className={`input input-sm block p-2.5 w-full max-w-sm ${errors.lastName ? 'input-error focus:input-error' : 'input-bordered focus:input-primary'} `}
@@ -156,7 +156,7 @@ export default function CreateUser () {
                 {errors.lastName && <p className="mt-1 text-xs text-error">{errors.lastName.message}</p>}
 
                 {/* Password: Required */}
-                <label className="form-control mb-1 text-sm font-medium dark:text-white mt-3">Password</label>
+                <label className="form-control mb-1 text-sm font-medium mt-3">Password</label>
                 <input
                     className={`input input-sm block p-2.5 w-full max-w-sm ${errors.password ? 'input-error focus:input-error' : 'input-bordered focus:input-primary'}`}
                     type="password"
@@ -171,7 +171,7 @@ export default function CreateUser () {
                     <p className="mt-1 text-xs text-error dark:text-error">{errors.password.message}</p>}
 
                 {/* Confirm Password: Required */}
-                <label className="form-control mb-1 text-sm font-medium dark:text-white mt-3">Confirm Password</label>
+                <label className="form-control mb-1 text-sm font-medium mt-3">Confirm Password</label>
                 <input
                     className={`input input-sm block p-2.5 w-full max-w-sm ${errors.confirmPassword ? 'input-error focus:input-error' : 'input-bordered focus:input-primary'} `}
                     type="password"
