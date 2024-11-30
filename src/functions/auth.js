@@ -3,7 +3,7 @@ import {
     signInWithEmailAndPassword
 } from 'firebase/auth';
 import { auth, db } from "../firebase/fire";
-import { doc, getDocs, query, collection, where, runTransaction } from "firebase/firestore";
+import { doc, getDoc, getDocs, setDoc, query, collection, where, runTransaction } from "firebase/firestore";
 
 export const signIn = async (email, password) => {
     try {
@@ -26,13 +26,10 @@ export const logOut = async () => {
 
 export const signUp = async (email, password, userData) => {
     try {
-        // Check if username exists first
-        const usernameQuery = await getDocs(
-            query(
-                collection(db, "users"),
-                where("username", "==", userData.username.toLowerCase())
-            )
-        );
+        const usernameQuery = await getDocs(query(
+            collection(db, "users"),
+            where("username", "==", userData.username.toLowerCase())
+        ));
 
         if (!usernameQuery.empty) {
             throw new Error("username-already-exists");
@@ -41,48 +38,24 @@ export const signUp = async (email, password, userData) => {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const user = userCredential.user;
 
-        // Use runTransaction instead of db.runTransaction
-        await runTransaction(db, async (transaction) => {
-            const counterRef = doc(db, "counters", "users");
-            const counterDoc = await transaction.get(counterRef);
+        const counterRef = doc(db, "counters", "users");
+        const counterDoc = await getDoc(counterRef);
+        const newUserId = (counterDoc.exists() ? counterDoc.data().latestUserId : 0) + 1;
 
-            let newUserId;
-            if (!counterDoc.exists()) {
-                newUserId = 1;
-                transaction.set(counterRef, { latestUserId: 1 });
-            } else {
-                newUserId = counterDoc.data().latestUserId + 1;
-                transaction.update(counterRef, { latestUserId: newUserId });
-            }
-
-            const userDocRef = doc(db, "users", user.uid);
-            transaction.set(userDocRef, {
-                ...userData,
-                username: userData.username.toLowerCase(),
-                role: userData.role || "user",
-                uid: user.uid,
-                createdAt: new Date().toISOString(),
-                userId: newUserId
-            });
+        await setDoc(doc(db, "users", user.uid), {
+            ...userData,
+            username: userData.username.toLowerCase(),
+            role: "user",
+            uid: user.uid,
+            createdAt: new Date().toISOString(),
+            userId: newUserId
         });
 
+        await setDoc(counterRef, { latestUserId: newUserId }, { merge: true });
         return user;
+
     } catch (error) {
         console.error("Error signing up: ", error);
-
-        // Return structured errors for all cases
-        if (error.message === "username-already-exists") {
-            throw new Error(JSON.stringify({
-                code: "auth/username-already-in-use",
-                message: "This username is already taken"
-            }));
-        } else if (error.code?.startsWith("auth/")) {
-            throw error; // Firebase auth errors are already proper Error objects
-        } else {
-            throw new Error(JSON.stringify({
-                code: "registration/unknown-error",
-                message: "An unexpected error occurred during registration"
-            }));
-        }
+        throw error;
     }
-}
+};

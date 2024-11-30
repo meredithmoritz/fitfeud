@@ -23,24 +23,26 @@ export default function AuthContextProvider({ children }) {
             }
 
             if (currentUser) {
-                // Set up new document listener only if user is authenticated
-                unsubscribeDoc = onSnapshot(
-                    doc(db, "users", currentUser.uid),
-                    (doc) => {
-                        if (doc.exists()) {
-                            setUser({ uid: currentUser.uid, ...doc.data() });
-                        } else {
-                            console.warn("User document does not exist");
-                            setUser(currentUser); // Fallback to basic auth user
+                // Add small delay if this is right after registration
+                setTimeout(() => {
+                    unsubscribeDoc = onSnapshot(
+                        doc(db, "users", currentUser.uid),
+                        (doc) => {
+                            if (doc.exists()) {
+                                setUser({ uid: currentUser.uid, ...doc.data() });
+                            } else {
+                                console.warn("User document does not exist");
+                                setUser(currentUser);
+                            }
+                            setLoading(false);
+                        },
+                        (error) => {
+                            console.error("Error fetching user data:", error);
+                            setUser(currentUser);
+                            setLoading(false);
                         }
-                        setLoading(false);
-                    },
-                    (error) => {
-                        console.error("Error fetching user data:", error);
-                        setUser(currentUser); // Fallback to basic auth user
-                        setLoading(false);
-                    }
-                );
+                    );
+                }, 1000);
             } else {
                 // User is logged out
                 setUser(null);
