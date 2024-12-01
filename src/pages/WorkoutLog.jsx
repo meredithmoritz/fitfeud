@@ -25,6 +25,16 @@ const WorkoutLog = () => {
         }
     };
 
+    const groupExercisesByCategory = (exercises) => {
+        return exercises.reduce((acc, exercise) => {
+            if (!acc[exercise.category]) {
+                acc[exercise.category] = [];
+            }
+            acc[exercise.category].push(exercise);
+            return acc;
+        }, {});
+    };
+
     useEffect(() => {
         // Initial load function inside useEffect
         const loadInitialWorkouts = async () => {
@@ -64,6 +74,22 @@ const WorkoutLog = () => {
         }).format(date);
     };
 
+    // Helper to summarize sets
+    const formatSets = (sets) => {
+        const totalSets = sets.length;
+        if (totalSets === 0) return "No sets";
+
+        // Get the weight range
+        const weights = sets.map(set => set.weight);
+        const minWeight = Math.min(...weights);
+        const maxWeight = Math.max(...weights);
+
+        if (minWeight === maxWeight) {
+            return `${totalSets} sets @ ${minWeight}lbs`;
+        }
+        return `${totalSets} sets (${minWeight}-${maxWeight}lbs)`;
+    };
+
     return (
         <div className="container mx-auto p-4">
             <div className="flex justify-between items-center mb-8">
@@ -82,40 +108,55 @@ const WorkoutLog = () => {
                 </div>
             ) : (
                 <>
-                    {workouts.map((workout, index) => (
-                        <div key={workout.id} className="card bg-base-100 shadow-lg mb-6">
-                            <div className="card-body">
-                                <div className="flex justify-between items-start">
-                                    <h2 className="card-title">
-                                        {formatDate(workout.createdAt)}
-                                    </h2>
-                                    <span className="badge badge-primary">
-                                        {workout.category}
-                                    </span>
-                                </div>
+                    {workouts.map((workout) => {
+                        const groupedExercises = groupExercisesByCategory(workout.exercises);
 
-                                <div className="mt-4">
-                                    {workout.exercises.map((exercise, idx) => (
-                                        <div key={idx} className="mb-2">
-                                            <p className="font-medium">{exercise.exerciseName}</p>
-                                            <p className="text-sm text-gray-600">
-                                                {exercise.sets.length} sets
-                                            </p>
+                        return (
+                            <div key={workout.id} className="card bg-base-100 shadow-lg mb-6">
+                                <div className="card-body">
+                                    <div className="flex justify-between items-start">
+                                        <h2 className="card-title">
+                                            {formatDate(workout.createdAt)}
+                                        </h2>
+                                    </div>
+
+                                    <div className="mt-4">
+                                        {Object.entries(groupedExercises).map(([category, exercises]) => (
+                                            <div key={category} className="mb-4">
+                                                <h3 className="font-semibold text-lg mb-2">
+                                                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                                                </h3>
+                                                {exercises.map((exercise, idx) => (
+                                                    <div key={idx} className="ml-4 mb-2">
+                                                        <p className="font-medium">{exercise.exerciseName}</p>
+                                                        <p className="text-sm text-gray-600">
+                                                            {formatSets(exercise.sets)}
+                                                        </p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {workout.notes && (
+                                        <div className="mt-4 text-sm text-gray-600">
+                                            <p className="font-medium">Notes:</p>
+                                            <p>{workout.notes}</p>
                                         </div>
-                                    ))}
-                                </div>
+                                    )}
 
-                                <div className="card-actions justify-end mt-4">
-                                    <Link
-                                        to={`/workouts/${workout.id}`}
-                                        className="btn btn-outline btn-sm"
-                                    >
-                                        View Details
-                                    </Link>
+                                    <div className="card-actions justify-end mt-4">
+                                        <Link
+                                            to={`/workouts/${workout.id}`}
+                                            className="btn btn-outline btn-sm"
+                                        >
+                                            View Details
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
 
                     {hasMore && (
                         <button

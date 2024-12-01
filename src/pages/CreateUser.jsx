@@ -187,7 +187,7 @@ export default function CreateUser () {
                 <div className="text-center">
                 <button
                     id="registerButton"
-                    className="btn btn-primary w-full mt-6 center lg:btn-wide"
+                    className="btn btn-primary w-full mt-6 text-center lg:btn-wide"
                     type="submit"
                     disabled={isLoading}
                 >

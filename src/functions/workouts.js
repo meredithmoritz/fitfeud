@@ -13,11 +13,14 @@ import {
 
 export const createWorkout = async (workoutData, uid) => {
     try {
+        // Create a new workout document with the workout data and user's ID
         const workoutRef = await addDoc(collection(db, "workouts"), {
-            ...workoutData,
-            uid, // Use uid instead of userId
-            createdAt: serverTimestamp()
+            ...workoutData,           // Spread the workout details (exercises, notes, etc.)
+            uid,                      // Add the user's Firebase auth ID
+            createdAt: serverTimestamp()  // Add server-side timestamp
         });
+
+        // Return the new workout's ID for navigation purposes
         return workoutRef.id;
     } catch (error) {
         console.error("Error creating workout:", error);

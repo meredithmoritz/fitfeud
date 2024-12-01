@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate} from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
 import { logOut } from '../functions/auth.js';
+import { User, LogOut } from "lucide-react";
 
 const NavBar = () => {
     const { user } = UserAuth();
@@ -19,7 +20,7 @@ const NavBar = () => {
     };
 
     return (
-        <nav className="navbar bg-base-100 border-b border-gray-200 mb-8">
+        <nav className="navbar bg-base-100 border-b border-gray-200 mb-6">
             <div className="flex-1">
                 <Link to="/" className="btn btn-ghost text-xl">
                     fitfeud
@@ -38,15 +39,15 @@ const NavBar = () => {
                                 <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="Profile" />
                             </div>
                         </div>
-                        <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-52 p-2 shadow">
+                        <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-40 p-2 shadow">
                             <li>
                                 <Link to="/profile">
-                                    Profile
+                                    <User size={14} /> Profile
                                 </Link>
                             </li>
                             <li>
                                 <button onClick={handleLogout} className="text-left">
-                                    Logout
+                                    <LogOut size={14} /> Logout
                                 </button>
                             </li>
                         </ul>
