@@ -3,7 +3,7 @@ describe('Workout Creation Flow', () => {
     // Before each test, we set up our initial state
     beforeEach(() => {
         // Custom command to handle login - defined in support/auth-commands.js
-        cy.login('testuser@example.com', 'password123');
+        cy.login('meredith', 'password123');
         // Visit the workout creation page
         cy.visit('/workouts/create');
         // Verify we're on the right page

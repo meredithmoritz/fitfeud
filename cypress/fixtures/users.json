@@ -5,14 +5,14 @@
       "password": "apsodi77",
       "firstName": "Test",
       "lastName": "User",
-      "username": "testuser"
+      "username": "meredithtest"
     },
     "newUser": {
-      "email": "new.user@example.com",
-      "password": "newPassword123",
-      "firstName": "New",
+      "email": "meredith.moritz+test@gmail.com",
+      "password": "apsodi77",
+      "firstName": "Test",
       "lastName": "User",
-      "username": "newuser"
+      "username": "meredithtest"
     }
   }
 }
