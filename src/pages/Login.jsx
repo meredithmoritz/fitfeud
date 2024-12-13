@@ -69,6 +69,7 @@ export default function Login() {
                 </label>
                 <input
                     id="loginEmailInput"
+                    data-testid="login-email"
                     className={`input input-sm block p-2.5 w-full max-w-sm ${errors.email ? 'input-error focus:input-error' : 'input-bordered focus:input-primary'}`}
                     placeholder="Email"
                     {...register("email", {
@@ -89,6 +90,7 @@ export default function Login() {
                 </label>
                 <input
                     id="loginPasswordInput"
+                    data-testid="login-password"
                     type="password"
                     placeholder="Password"
                     className={`input input-sm block p-2.5 w-full max-w-sm ${errors.password ? 'input-error focus:input-error' : 'input-bordered focus:input-primary'}`}
@@ -103,6 +105,7 @@ export default function Login() {
                     <button
                         type="submit"
                         id="loginButton"
+                        data-testid="login-submit"
                         disabled={isLoading}
                         className={`btn btn-primary w-full mt-6 center lg:btn-wide ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}>
                         {isLoading ? (

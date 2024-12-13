@@ -1,11 +1,11 @@
 {
   "testUsers": {
     "standard": {
-      "email": "meredith.moritz+test@gmail.com",
+      "email": "meredith.moritz@gmail.com",
       "password": "apsodi77",
-      "firstName": "Test",
-      "lastName": "User",
-      "username": "meredithtest"
+      "firstName": "Meredith",
+      "lastName": "Moritz",
+      "username": "meredith"
     },
     "newUser": {
       "email": "meredith.moritz+test@gmail.com",

@@ -7,7 +7,7 @@ export default function UserDashboard() {
     return (
         <div className="m-5">
             {user ? (
-                <div>Welcome {user?.firstName}!</div>
+                <div data-testid="welcome-user">Welcome {user?.firstName}!</div>
             ) : (
                 <div>Welcome!</div>
             )}

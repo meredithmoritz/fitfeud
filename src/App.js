@@ -9,7 +9,7 @@ function App() {
   const { user, loading } = UserAuth();
 
   if (loading) {
-      return null; // Do not render anything while loading page
+      return null;
   }
 
   return (

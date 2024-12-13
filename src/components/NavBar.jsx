@@ -33,7 +33,7 @@ const NavBar = () => {
             </div>
             <div className="flex-none gap-2">
                 {user ? (
-                    <div className="dropdown dropdown-end">
+                    <div className="dropdown dropdown-end" data-testid="user-dropdown">
                         <div tabIndex={0} className="btn btn-ghost btn-circle avatar">
                             <div className="w-10 rounded-full">
                                 <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="Profile" />
@@ -41,12 +41,12 @@ const NavBar = () => {
                         </div>
                         <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box mt-3 w-40 p-2 shadow">
                             <li>
-                                <Link to="/profile">
+                                <Link to="/profile" data-testid="profile-button">
                                     <User size={14} /> Profile
                                 </Link>
                             </li>
                             <li>
-                                <button onClick={handleLogout} className="text-left">
+                                <button data-testid="logout-button" onClick={handleLogout} className="text-left">
                                     <LogOut size={14} /> Logout
                                 </button>
                             </li>
