@@ -1,8 +1,8 @@
-import { UserAuth } from "./context/AuthContext";
-import NonUserRoutes from "./routes/NonUserRoutes";
-import UserRoutes from "./routes/UserRoutes";
+import { UserAuth } from "./context/AuthContext.jsx";
+import NonUserRoutes from "./routes/NonUserRoutes.jsx";
+import UserRoutes from "./routes/UserRoutes.jsx";
 import './index.css';
-import NavBar from "./components/NavBar";
+import NavBar from "./components/NavBar.jsx";
 
 function App() {
   // Retrieves the current user's authentication status:

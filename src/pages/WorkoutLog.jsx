@@ -57,11 +57,32 @@ const WorkoutLog = () => {
     }, [user]);
 
     if (loading) {
-        return <div className="loading loading-spinner loading-lg"></div>;
+        return (
+            <div className="container mx-auto p-4">
+                <div className="skeleton h-4 w-28 mb-2"></div>
+                <div className="skeleton h-4 w-full mb-2"></div>
+                <div className="skeleton h-4 w-full mb-2"></div>
+            </div>
+        );
     }
 
     if (error) {
-        return <div className="alert alert-error">{error}</div>;
+        return (
+            <div role="alert" className="alert alert-error text-xs p-2 mb-4">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 shrink-0 stroke-current"
+                    fill="none"
+                    viewBox="0 0 24 24">
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span>{error}</span>
+            </div>
+        );
     }
 
     const formatDate = (timestamp) => {
@@ -95,7 +116,7 @@ const WorkoutLog = () => {
             <div className="flex justify-between items-center mb-8">
                 <h1 className="text-3xl font-bold">Workout Log</h1>
                 <Link to="/workouts/create" className="btn btn-primary">
-                    <Plus /> Add Workout
+                    <Plus size="16" /> Add Workout
                 </Link>
             </div>
 

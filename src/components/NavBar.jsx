@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
 import { logOut } from '../functions/auth.js';
 import { User, LogOut } from "lucide-react";
@@ -56,12 +56,14 @@ const NavBar = () => {
                     <>
                         <button
                             className="btn btn-primary ml-2"
+                            data-testid="login-button"
                             onClick={() => navigate('/login')}
                         >
                             Log in
                         </button>
                         <button
                             className="btn btn-secondary"
+                            data-testid="register-button"
                             onClick={() => navigate('/create-user')}
                         >
                             Register

@@ -14,5 +14,15 @@
       "lastName": "User",
       "username": "meredithtest"
     }
+  },
+  "registrationTestUsers": {
+    "valid": {
+      "email": "meredith.moritz+registertest@gmail.com",
+      "password": "apsodi77",
+      "confirmPassword": "apsodi77",
+      "firstName": "Meredith",
+      "lastName": "registertest",
+      "username": "meredithregister"
+    }
   }
 }

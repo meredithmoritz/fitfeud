@@ -1,4 +1,4 @@
-import { db } from "../firebase/fire";
+import { db } from "../firebase/fire.js";
 import {
     collection,
     addDoc,

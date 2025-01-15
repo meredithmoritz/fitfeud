@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState} from 'react'
 import { signIn } from '../functions/auth';
 import { useForm } from 'react-hook-form';
 
 export default function Login() {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        mode: 'onSubmit'
+    });
     const [isLoading, setIsLoading] = useState(false);
     const [authError, setAuthError] = useState('');
 
@@ -31,19 +33,23 @@ export default function Login() {
                     default:
                         setAuthError('An error occurred during login.');
                 }
+                setIsLoading(false);
             }
         } catch (error) {
             console.error("Error signing in: ", error);
             setAuthError('An unexpected error occurred. Please try again.');
-        } finally {
             setIsLoading(false);
         }
     }
 
     return (
         <div>
-            <form id="loginForm" className="max-w-sm mx-auto" onSubmit={handleSubmit(onSubmit)}>
-                <h1 className="text-3xl font-bold mb-10">Log in</h1>
+            <form
+                id="loginForm"
+                className="max-w-sm mx-auto"
+                onSubmit={handleSubmit(onSubmit)}
+                noValidate>
+                <h1 className="text-3xl font-bold mb-10" data-testid="login-header">Log in</h1>
 
                 {authError && (
                     <div role="alert" className="alert alert-error text-xs p-2 mb-4">
@@ -97,7 +103,6 @@ export default function Login() {
                     {...register("password", {
                         required: "Please enter a password"
                     })}
-                    onChange={() => setAuthError('')}
                 />
                 {errors.password && <p className="mt-1 text-xs text-error">{errors.password.message}</p>}
 

@@ -1,6 +1,7 @@
 {
   "name": "fitfeud",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "engines": {
     "node": "20.14.0",
@@ -34,7 +35,8 @@
     "test:debug": "cross-env NODE_ENV=test playwright test --debug",
     "test:ui": "cross-env NODE_ENV=test DISABLE_ESLINT_PLUGIN=true playwright test --ui",
     "verify:env": "dotenv -e .env.test -- node verify-env.js",
-    "test:seed": "node --experimental-json-modules --loader ts-node/esm tests/scripts/seed-emulator.ts",
+    "test:seed": "npx tsx tests/scripts/seed-emulator.ts",
+    "test:verify-seed": "npx tsx tests/scripts/verify-seed.ts",
     "test:full": "npm run test:seed && npm run test:e2e"
   },
   "eslintConfig": {
@@ -55,16 +57,24 @@
     ]
   },
   "devDependencies": {
+    "@babel/cli": "^7.26.4",
+    "@babel/core": "^7.26.0",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.26.3",
+    "@babel/preset-typescript": "^7.26.0",
     "@playwright/test": "^1.49.1",
-    "@types/node": "^22.10.1",
+    "@types/node": "^22.10.2",
     "autoprefixer": "^10.4.19",
+    "babel-loader": "^9.2.1",
+    "babel-plugin-module-resolver": "^5.0.2",
     "cross-env": "^7.0.3",
     "dotenv-cli": "^7.4.4",
     "eslint": "^8.57.0",
     "eslint-config-react-app": "^7.0.1",
     "postcss": "^8.4.31",
     "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
     "typescript": "^4.9.5"
   }
 }

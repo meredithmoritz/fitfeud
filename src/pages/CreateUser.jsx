@@ -53,7 +53,7 @@ export default function CreateUser () {
     return (
         <>
             <form onSubmit={handleSubmit(onSubmit)} id="registrationForm" className="max-w-sm mx-auto">
-                <h1 className="text-3xl font-bold mb-10">Register</h1>
+                <h1 data-testid="register-header" className="text-3xl font-bold mb-10">Register</h1>
 
                 {serverError && (
                     <div role="alert" className="alert alert-error text-xs p-2 mb-4">
@@ -76,6 +76,7 @@ export default function CreateUser () {
                 <label id="regEmaiLabel" className="form-control mb-1 text-sm font-medium">Email</label>
                 <input
                     id="regEmailInput"
+                    data-testid="register-email"
                     className={`input input-sm block p-2.5 w-full max-w-sm ${errors.email ? 'input-error focus:input-error' : 'input-bordered focus:input-primary'}`}
                     placeholder="you@gmail.com"
                     {...register("email", {
@@ -94,6 +95,7 @@ export default function CreateUser () {
                        className="form-control mb-1 text-sm font-medium mt-3">Username</label>
                 <input
                     id="regUsernameInput"
+                    data-testid="register-username"
                     className={`input input-sm block p-2.5 w-full max-w-sm ${errors.username ? 'input-error focus:input-error' : 'input-bordered focus:input-primary'}`}
                     type="text"
                     placeholder="Username"
@@ -116,14 +118,6 @@ export default function CreateUser () {
                             noConsecutiveHyphens: value =>
                                 !/--/.test(value) ||
                                 "Username cannot contain consecutive hyphens"
-                        },
-                        minLength: {
-                            value: 6,
-                            message: "Username must be at least 6 characters"
-                        },
-                        maxLength: {
-                            value: 30,
-                            message: "Username cannot exceed 30 characters"
                         }
                     })}
                 />
@@ -132,6 +126,7 @@ export default function CreateUser () {
                 {/* First Name: Required */}
                 <label className="form-control mb-1 text-sm font-medium mt-3">First Name</label>
                 <input
+                    data-testid="register-firstname"
                     className={`input input-sm block p-2.5 w-full max-w-sm ${errors.firstName ? 'input-error focus:input-error' : 'input-bordered focus:input-primary'} `}
                     type="text"
                     placeholder="First Name"
@@ -146,6 +141,7 @@ export default function CreateUser () {
                 <label className="form-control mb-1 text-sm font-medium mt-3">Last Name
                     (Optional)</label>
                 <input
+                    data-testid="register-lastname"
                     className={`input input-sm block p-2.5 w-full max-w-sm ${errors.lastName ? 'input-error focus:input-error' : 'input-bordered focus:input-primary'} `}
                     type="text"
                     placeholder="Last Name"
@@ -158,6 +154,7 @@ export default function CreateUser () {
                 {/* Password: Required */}
                 <label className="form-control mb-1 text-sm font-medium mt-3">Password</label>
                 <input
+                    data-testid="register-password"
                     className={`input input-sm block p-2.5 w-full max-w-sm ${errors.password ? 'input-error focus:input-error' : 'input-bordered focus:input-primary'}`}
                     type="password"
                     placeholder="Password"
@@ -173,6 +170,7 @@ export default function CreateUser () {
                 {/* Confirm Password: Required */}
                 <label className="form-control mb-1 text-sm font-medium mt-3">Confirm Password</label>
                 <input
+                    data-testid="register-confirmpassword"
                     className={`input input-sm block p-2.5 w-full max-w-sm ${errors.confirmPassword ? 'input-error focus:input-error' : 'input-bordered focus:input-primary'} `}
                     type="password"
                     placeholder="Confirm Password"
@@ -186,6 +184,7 @@ export default function CreateUser () {
 
                 <div className="text-center">
                 <button
+                    data-testid="register-submit"
                     id="registerButton"
                     className="btn btn-primary w-full mt-6 text-center lg:btn-wide"
                     type="submit"

@@ -2,7 +2,7 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword
 } from 'firebase/auth';
-import { auth, db } from "../firebase/fire";
+import { auth, db } from "../firebase/fire.js";
 import { doc, getDoc, getDocs, setDoc, query, collection, where } from "firebase/firestore";
 
 export const signIn = async (email, password) => {
